@@ -4,10 +4,23 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Pokemon Chat</title>
+        <link rel="icon" type="image/png" href="images/favicon.ico"/>
         <link rel="stylesheet" type="text/css" href="style.css">
-        <script type="text/javascript" src="index.js"></script>
+        <script type="text/javascript" src="index.js" defer></script>
     </head>
     <body>
-        <h2>Pokemon Chat</h2>
+        <div id="selectPokemon">
+            <div>
+                <img src="images/arrow.png" alt="Scroll up" class="scrollArrow" onclick="scrollSelectPokemonList('up')">
+            </div>
+            <div id="selectPokemonListBox"></div>
+            <div>
+                <img src="images/arrow.png" alt="Scroll down" class="scrollArrow scrollArrowDown" onclick="scrollSelectPokemonList('down')">
+            </div>
+            <div id="selectPokemonTextBox">
+                <img src="images/select_box.png" alt="Select a Pokemon..." class="selectPokemonTextImg">
+                <img src="images/arrow.png" id="selectPokemonTextBoxArrow" class="scrollArrowDown">
+            </div>
+        </div>
     </body>
 </html>
