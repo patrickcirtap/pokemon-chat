@@ -1,17 +1,19 @@
-body {
+html, body {
     background-image: url("images/background.png");
     background-size: 200px;
     background-color: #ecfcec;
+    height: 100%;
+    margin: 0;
 }
 
 #selectPokemon {
-    border: 1px solid #ff0000; /* deletelater */
-    height: 100%;
-    width: 33%;
-    margin: 0 auto;
+    height: 95%;
+    width: 500px;
     display: flex;
-    flex-direction: column;
+    flex-flow: column;
+    margin: 0 auto;
     align-items: center;
+    padding-top: 20px;
 }
 
 .scrollArrow {
@@ -25,55 +27,42 @@ body {
     transform: rotate(180deg);
 }
 
-#selectPokemonListBox {
-    border: 1px solid #00ff00; /* deletelater */
-    margin-top: 5px;
-    margin-bottom: 5px;
-    height: 300px;
+#selectPokemonList {
     width: 400px;
+    margin-top: 5px;
+    margin-bottom: 10px;
     text-align: center;
-    min-width: 400px;
-    max-width: 400px;
     overflow-y: auto;
+
+    scrollbar-width: none;  /* Hide scrollbar for Firefox */
+    -ms-overflow-style: none;  /* Hide scrollbar for IE and Edge */
+}
+#selectPokemonList::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome, Safari and Opera */
 }
 
-#selectPokemonListBox::-webkit-scrollbar {
-    display: none; /* Hide scrollbar for Chrome, Safari and Opera */
-  }
-  
-#selectPokemonListBox {
--ms-overflow-style: none;  /* Hide scrollbar for IE and Edge */
-scrollbar-width: none;  /* Hide scrollbar for Firefox */
+.pokemonChoiceImg {
+    width: 70px;
+    height: 70px;
+    border: 1px solid #000000;
+    outline: 2px solid #000000;
+    outline-offset: -4px;
+    background-color: #ffffff;
+    margin: 10px 20px 10px 20px;
 }
 
 #selectPokemonTextBox {
-    border: 1px solid #0000ff; /* deletelater */
-    position: fixed;
-    bottom: 20px;
-
+    margin-top: 10px;
+    padding-left: 30px;
     pointer-events: none;
     user-select: none;
     -webkit-user-select: none; /* Safari */
     -ms-user-select: none; /* IE 10 and IE 11 */
 }
 
-.selectPokemonTextImg {
+.selectPokemonTextBoxImg {
     width: 400px;
-    min-width: 400px;
-    max-width: 400px;
     height: auto;
-}
-
-.pokemonChoiceImg {
-    width: 70px;
-    height: 70px;
-
-    border: 1px solid #000000;
-    outline: 2px solid #000000;
-    outline-offset: -4px;
-
-    background-color: #ffffff;
-    margin: 10px 20px 10px 20px;
 }
 
 .pokemonIsAvailable {
@@ -87,7 +76,7 @@ scrollbar-width: none;  /* Hide scrollbar for Firefox */
 #selectPokemonTextBoxArrow {
     width: 20px;
     height: auto;
-    position: absolute;
+    position: relative;
     bottom: 0;
-    right: 15px;
+    right: 35px;
 }

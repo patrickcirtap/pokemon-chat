@@ -1,5 +1,6 @@
 "use strict";
 
+// TODO - delete this
 const allPokemon = [
     { name: "bulbasaur", isAvailable: "true" }, { name: "bulbasaur", isAvailable: "true" },
     { name: "bulbasaur", isAvailable: "false" }, { name: "bulbasaur", isAvailable: "true" },
@@ -12,12 +13,36 @@ const allPokemon = [
     { name: "bulbasaur", isAvailable: "true" }, { name: "bulbasaur", isAvailable: "true" },
     { name: "bulbasaur", isAvailable: "true" }, { name: "bulbasaur", isAvailable: "false" },
     { name: "bulbasaur", isAvailable: "true" }, { name: "bulbasaur", isAvailable: "true" },
+    { name: "bulbasaur", isAvailable: "false" }, { name: "bulbasaur", isAvailable: "true" },
+    { name: "bulbasaur", isAvailable: "false" }, { name: "bulbasaur", isAvailable: "true" },
+    { name: "bulbasaur", isAvailable: "false" }, { name: "bulbasaur", isAvailable: "true" },
     { name: "bulbasaur", isAvailable: "true" }, { name: "bulbasaur", isAvailable: "true" },
+    { name: "bulbasaur", isAvailable: "true" }, { name: "bulbasaur", isAvailable: "true" },
+    { name: "bulbasaur", isAvailable: "true" }, { name: "bulbasaur", isAvailable: "false" },
+    { name: "bulbasaur", isAvailable: "true" }, { name: "bulbasaur", isAvailable: "true" },
+    { name: "bulbasaur", isAvailable: "true" }, { name: "bulbasaur", isAvailable: "true" }
 ];
+
+const MessageType = {
+    POKEMON_CHOICES: "POKEMON_CHOICES",
+    JOIN_REQUEST: "JOIN_REQUEST",
+    JOIN_CONFIRM: "JOIN_CONFIRM",
+    JOIN_REJECT: "JOIN_REJECT",
+    NEW_USER_JOIN: "NEW_USER_JOIN",
+    NEW_USER_MESSAGE: "NEW_USER_MESSAGE",
+    USER_LEAVE: "USER_LEAVE"
+}
+
+let webSocket;
 
 const scrollSelectPokemonListDistancePx = 50;
 const selectPokemonTextBoxArrowBlinkSpeedMs = 500;
-const selectPokemonTextBoxArrow = document.getElementById("selectPokemonTextBoxArrow");
+const selectPokemonTextBoxArrowEl = document.getElementById("selectPokemonTextBoxArrow");
+
+// TODO - stop this once we join chat
+const textBoxArrowBlinkIntervalRef = setInterval(function () {
+    selectPokemonTextBoxArrowEl.style.visibility = (selectPokemonTextBoxArrowEl.style.visibility === 'hidden' ? '' : 'hidden');
+}, selectPokemonTextBoxArrowBlinkSpeedMs);
 
 for(const pokemon of allPokemon) {
     const pokemonName = pokemon.name;
@@ -31,23 +56,19 @@ for(const pokemon of allPokemon) {
         pokemonChoiceImg.classList.add("pokemonIsNotAvailable");
     }
 
-    document.getElementById("selectPokemonListBox").appendChild(pokemonChoiceImg);
+    document.getElementById("selectPokemonList").appendChild(pokemonChoiceImg);
 }
 
 function scrollSelectPokemonList(direction) {
     switch(direction) {
         case "up":
-            document.getElementById("selectPokemonListBox").scrollBy(0, -scrollSelectPokemonListDistancePx);
+            document.getElementById("selectPokemonList").scrollBy(0, -scrollSelectPokemonListDistancePx);
             break;
         case "down":
-            document.getElementById("selectPokemonListBox").scrollBy(0, scrollSelectPokemonListDistancePx);
+            document.getElementById("selectPokemonList").scrollBy(0, scrollSelectPokemonListDistancePx);
             break;
         default:
             // TODO - handle default switch statements everywhere
             break;
     }
 }
-
-setInterval(function () {
-    selectPokemonTextBoxArrow.style.visibility = (selectPokemonTextBoxArrow.style.visibility === 'hidden' ? '' : 'hidden');
-}, selectPokemonTextBoxArrowBlinkSpeedMs);
