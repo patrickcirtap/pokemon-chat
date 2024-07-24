@@ -16,9 +16,9 @@ const selectPokemonTextBoxArrowBlinkSpeedMs = 500;
 const selectPokemonTextBoxArrowEl = document.getElementById("selectPokemonTextBoxArrow");
 
 // TODO - stop this once we join chat
-const textBoxArrowBlinkIntervalRef = setInterval(function () {
-    selectPokemonTextBoxArrowEl.style.visibility = (selectPokemonTextBoxArrowEl.style.visibility === 'hidden' ? '' : 'hidden');
-}, selectPokemonTextBoxArrowBlinkSpeedMs);
+// const textBoxArrowBlinkIntervalRef = setInterval(function () {
+//     selectPokemonTextBoxArrowEl.style.visibility = (selectPokemonTextBoxArrowEl.style.visibility === 'hidden' ? '' : 'hidden');
+// }, selectPokemonTextBoxArrowBlinkSpeedMs);
 
 
 // connectToWebSocket();
@@ -65,7 +65,7 @@ function displayPokemonChoices(messageObject) {
         const pokemonName = pokemon.name;
         const pokemonChoiceImg = document.createElement("img");
         pokemonChoiceImg.setAttribute("src", `images/pokemon/${pokemonName}.png`);
-        pokemonChoiceImg.classList.add("pokemonChoiceImg");
+        pokemonChoiceImg.classList.add("pokemonChoiceLarge");
         if(pokemon.isAvailable === "true") {
             // pokemonChoiceImg.onclick = function() { requestJoinChat(pokemonName) };
             pokemonChoiceImg.classList.add("pokemonIsAvailable");
@@ -92,6 +92,39 @@ function scrollList(list, direction) {
     }
 }
 
+function sendMessage() {
+    const chatMessage = document.getElementById("chatInput").value;
+    // TODO - client side validation
+
+    const newChatMessage = createNewChatMessageDiv("Lugia", chatMessage);
+    document.getElementById("chatWindowMessages").appendChild(newChatMessage);
+    
+    const chatWindow = document.getElementById("chatWindowMessages");
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+
+    document.getElementById("chatInput").value = "";
+}
+
+function createNewChatMessageDiv(sender, chatMessage) {
+    const newChatMessageImg = document.createElement("img");
+    newChatMessageImg.setAttribute("src", "images/pokemon/lugia.png");
+    newChatMessageImg.classList.add("pokemonChoiceSmall");
+    const newChatMessageImgDiv = document.createElement("div");
+    newChatMessageImgDiv.classList.add("newChatMessageImg");
+    newChatMessageImgDiv.appendChild(newChatMessageImg);
+
+    const newChatMessageTextDiv = document.createElement("div");
+    newChatMessageTextDiv.classList.add("newChatMessageText");
+    newChatMessageTextDiv.innerHTML = `${sender}:<br/>${chatMessage}`;
+
+    const newChatMessageDiv = document.createElement("div");
+    newChatMessageDiv.classList.add("chatMessage");
+    newChatMessageDiv.appendChild(newChatMessageImgDiv);
+    newChatMessageDiv.appendChild(newChatMessageTextDiv);
+
+    return newChatMessageDiv;
+
+}
 
 
 
@@ -354,14 +387,15 @@ const pokemonListTest = [
     {name: "egg", isAvailable: "true"}
 ];
 
-testDisplayPokemonChoices();
+// testDisplayPokemonChoices();
+testDisplayConnectedPokemon();
 
 function testDisplayPokemonChoices() {
     for(const pokemon of pokemonListTest) {
         const pokemonName = pokemon.name;
         const pokemonChoiceImg = document.createElement("img");
         pokemonChoiceImg.setAttribute("src", `images/pokemon/${pokemonName}.png`);
-        pokemonChoiceImg.classList.add("pokemonChoiceImg");
+        pokemonChoiceImg.classList.add("pokemonChoiceLarge");
         pokemonChoiceImg.style.backgroundColor = pokemonColors[pokemonName];
         if(pokemon.isAvailable === "true") {
             pokemonChoiceImg.classList.add("pokemonIsAvailable");
@@ -370,5 +404,23 @@ function testDisplayPokemonChoices() {
         }
 
         document.getElementById("selectPokemonList").appendChild(pokemonChoiceImg);
+    }
+}
+
+function testDisplayConnectedPokemon() {
+    let i = 0;
+    for(const pokemon of pokemonListTest) {
+        const pokemonName = pokemon.name;
+        const connectedPokemonImg = document.createElement("img");
+        connectedPokemonImg.setAttribute("src", `images/pokemon/${pokemonName}.png`);
+        connectedPokemonImg.classList.add("pokemonChoiceLarge");
+        connectedPokemonImg.style.backgroundColor = pokemonColors[pokemonName];
+
+        document.getElementById("connectedPokemonList").appendChild(connectedPokemonImg);
+
+        i++;
+        if(i >= 47) {
+            return;
+        }
     }
 }

@@ -22,53 +22,40 @@
             <img src="images/arrow.png" id="selectPokemonTextBoxArrow" class="scrollArrowDown">
         </div>
     </div> -->
-
     <div id="pokemonChat">
         <div id="connectedPokemon">
             <div>
                 <img src="images/arrow.png" alt="Scroll up" class="scrollArrow" onclick="scrollList('connectedPokemonList', 'up')">
             </div>
             <div id="connectedPokemonList">
-                <h1>list...</h1>
-                <h1>list...</h1>
-                <h1>list...</h1>
-                <h1>list...</h1>
-                <h1>list...</h1>
-                <h1>list...</h1>
-                <h1>list...</h1>
-                <h1>list...</h1>
-                <h1>list...</h1>
-                <h1>list...</h1>
-                <h1>list...</h1>
-                <h1>list...</h1>
-                <h1>list...</h1>
-                <h1>list...</h1>
             </div>
             <div>
                 <img src="images/arrow.png" alt="Scroll down" class="scrollArrow scrollArrowDown" onclick="scrollList('connectedPokemonList', 'down')">
             </div>
         </div>
         <div id="chatWindow">
-            <div id="chatWindowMessages">
-                <p>mesages</p>
-            </div>
+            <img src="images/arrow.png" alt="Scroll up" id="scrollChatArrowUp" onclick="scrollList('chatWindowMessages', 'up')">
+            <img src="images/arrow.png" alt="Scroll down" id="scrollChatArrowDown" onclick="scrollList('chatWindowMessages', 'down')">
+            <div id="chatWindowMessages"></div>
             <div id="chatWindowText">
-                <div>
-                    user img
+                <div id="chatWindowTextIconInput">
+                    <div>
+                        <img src="images/pokemon/dragonite.png" class="pokemonChoiceLarge">
+                    </div>
+                    <div>
+                        <textarea id="chatInput"></textarea>
+                    </div>
                 </div>
                 <div>
-                    text box
-                </div>
-                <div>
-                    send arrow
+                    <img src="images/arrow.png" alt="Send" class="scrollArrow" onclick="sendMessage()">
                 </div>
             </div>
         </div>
     </div>
 
     <link rel="stylesheet" type="text/css" href="style.css">
-    <!-- <script type="text/javascript" src="pokemon-colors.js"></script>
-    <script type="text/javascript" src="index.js"></script> -->
+    <script type="text/javascript" src="pokemon-colors.js"></script>
+    <script type="text/javascript" src="index.js"></script>
 </body>
 
 </html>
