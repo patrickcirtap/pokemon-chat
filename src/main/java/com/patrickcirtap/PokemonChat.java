@@ -19,6 +19,7 @@ public class PokemonChat {
     // TODO - proper exception handling
     // TODO - look into async message sending
     // TODO - synchronise accessing allPokemon
+    // TODO - consider only sending non-available pkmn when showing user options
 
     private static final List<Pokemon> allPokemon = Arrays.asList(
             new Pokemon("bulbasaur"),
@@ -30,6 +31,16 @@ public class PokemonChat {
             new Pokemon("squirtle"),
             new Pokemon("wartortle"),
             new Pokemon("blastoise"),
+            new Pokemon("caterpie"),
+            new Pokemon("metapod"),
+            new Pokemon("butterfree"),
+            new Pokemon("weedle"),
+            new Pokemon("kakuna"),
+            new Pokemon("beedrill"),
+            new Pokemon("pidgey"),
+            new Pokemon("pidgeotto"),
+            new Pokemon("pidgeot"),
+            
             new Pokemon("pikachu"),
             new Pokemon("raichu"),
             new Pokemon("onix"),
