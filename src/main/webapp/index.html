@@ -9,22 +9,66 @@
 </head>
 
 <body>
-    <div id="selectPokemon">
+    <!-- <div id="selectPokemon">
         <div>
-            <img src="images/arrow.png" alt="Scroll up" class="scrollArrow" onclick="scrollSelectPokemonList('up')">
+            <img src="images/arrow.png" alt="Scroll up" class="scrollArrow" onclick="scrollList('selectPokemonList', 'up')">
         </div>
         <div id="selectPokemonList"></div>
         <div>
-            <img src="images/arrow.png" alt="Scroll down" class="scrollArrow scrollArrowDown" onclick="scrollSelectPokemonList('down')">
+            <img src="images/arrow.png" alt="Scroll down" class="scrollArrow scrollArrowDown" onclick="scrollList('selectPokemonList', 'down')">
         </div>
         <div id="selectPokemonTextBox">
             <img src="images/select_box.png" alt="Select a Pokemon..." class="selectPokemonTextBoxImg">
             <img src="images/arrow.png" id="selectPokemonTextBoxArrow" class="scrollArrowDown">
         </div>
+    </div> -->
+
+    <div id="pokemonChat">
+        <div id="connectedPokemon">
+            <div>
+                <img src="images/arrow.png" alt="Scroll up" class="scrollArrow" onclick="scrollList('connectedPokemonList', 'up')">
+            </div>
+            <div id="connectedPokemonList">
+                <h1>list...</h1>
+                <h1>list...</h1>
+                <h1>list...</h1>
+                <h1>list...</h1>
+                <h1>list...</h1>
+                <h1>list...</h1>
+                <h1>list...</h1>
+                <h1>list...</h1>
+                <h1>list...</h1>
+                <h1>list...</h1>
+                <h1>list...</h1>
+                <h1>list...</h1>
+                <h1>list...</h1>
+                <h1>list...</h1>
+            </div>
+            <div>
+                <img src="images/arrow.png" alt="Scroll down" class="scrollArrow scrollArrowDown" onclick="scrollList('connectedPokemonList', 'down')">
+            </div>
+        </div>
+        <div id="chatWindow">
+            <div id="chatWindowMessages">
+                <p>mesages</p>
+            </div>
+            <div id="chatWindowText">
+                <div>
+                    user img
+                </div>
+                <div>
+                    text box
+                </div>
+                <div>
+                    send arrow
+                </div>
+            </div>
+        </div>
     </div>
 
     <link rel="stylesheet" type="text/css" href="style.css">
-    <script type="text/javascript" src="index.js" defer></script>
+    <!-- <script type="text/javascript" src="pokemon-colors.js"></script>
+    <script type="text/javascript" src="index.js"></script> -->
 </body>
 
 </html>

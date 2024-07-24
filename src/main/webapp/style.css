@@ -86,3 +86,61 @@ html, body {
 
 /* ABOVE: select pokemon window */
 /* BELOW: pokemon chat window */
+
+#pokemonChat {
+    border: 1px solid #ff0000;
+    
+    height: 90%;
+    width: 1000px;
+    display: flex;
+    margin: 0 auto;
+    align-items: center;
+    padding-top: 30px;
+}
+
+#connectedPokemon {
+    border: 1px solid #00ff00;
+
+    width: 33.3%;
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+    margin: 0 auto;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#connectedPokemonList {
+    border: 1px solid rgb(148, 0, 161);
+
+    width: 90%;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    text-align: center;
+    overflow-y: auto;
+
+    scrollbar-width: none; /* Hide scrollbar for Firefox */
+    -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
+}
+#connectedPokemonList::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome, Safari and Opera */
+}
+
+#chatWindow {
+    border: 1px solid #0000ff;
+    width: 66.6%;
+    height: 100%;
+    margin-bottom: 20px;
+}
+
+#chatWindowMessages {
+    border: 1px solid #ff9300;
+}
+
+#chatWindowText {
+    border: 1px solid #EC00FF;
+    
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+}
