@@ -12,21 +12,26 @@ const MessageType = {
 
 let webSocket;
 let currentPokemonName;
-const pokemonChatWebSocketEndpoint = 'ws://localhost:8080/pokemon-chat/pokemon-chat';
+const pokemonChatWebSocketEndpoint = "/pokemon-chat/pokemon-chat";
 const scrollListDistancePx = 50;
 const chatInputMaxLengthChars = 300;
 const selectPokemonTextBoxArrowBlinkSpeedMs = 300;
 const selectPokemonTextBoxArrowEl = document.getElementById("selectPokemonTextBoxArrow");
 
 const textBoxArrowBlinkIntervalRef = setInterval(function () {
-    selectPokemonTextBoxArrowEl.style.visibility = (selectPokemonTextBoxArrowEl.style.visibility === 'hidden' ? '' : 'hidden');
+    selectPokemonTextBoxArrowEl.style.visibility = (selectPokemonTextBoxArrowEl.style.visibility === "hidden" ? "" : "hidden");
 }, selectPokemonTextBoxArrowBlinkSpeedMs);
 
 
 connectToWebSocket();
 
 function connectToWebSocket() {
-    webSocket = new WebSocket(pokemonChatWebSocketEndpoint);
+    if (window.location.protocol === "http:") {
+        webSocket = new WebSocket(`ws://${window.location.host}${pokemonChatWebSocketEndpoint}`);
+    } else {
+        webSocket = new WebSocket(`wss://${window.location.host}${pokemonChatWebSocketEndpoint}`);
+    }
+
     webSocket.onmessage = function (newMessage) { wsOnMessage(newMessage) };
 }
 
@@ -239,11 +244,19 @@ function createNewChatMessageDiv(sender, chatMessage) {
     newChatMessageImgDiv.classList.add("newChatMessageImg");
     newChatMessageImgDiv.appendChild(newChatMessageImg);
 
-    const newChatMessageTextDiv = document.createElement("div");
-    newChatMessageTextDiv.classList.add("newChatMessageText");
     const currentTime = getCurrentTime();
     const senderText = `<b><span style="color: ${pokemonColors[sender]}">${sender.toUpperCase()}</span> ${currentTime}</b>`;
-    newChatMessageTextDiv.innerHTML = `${senderText}<br/><span class="chatMessageTextArea">${chatMessage}</span>`;
+    const newChatMessageSenderDiv = document.createElement("div");
+    newChatMessageSenderDiv.innerHTML = senderText;
+
+    const newChatMessageContentDiv = document.createElement("div");
+    newChatMessageContentDiv.classList.add("newChatMessageContent");
+    newChatMessageContentDiv.innerText = chatMessage;
+
+    const newChatMessageTextDiv = document.createElement("div");
+    newChatMessageTextDiv.classList.add("newChatMessageText");
+    newChatMessageTextDiv.appendChild(newChatMessageSenderDiv);
+    newChatMessageTextDiv.appendChild(newChatMessageContentDiv);
 
     const newChatMessageDiv = document.createElement("div");
     newChatMessageDiv.classList.add("chatMessage");

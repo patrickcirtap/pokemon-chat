@@ -234,12 +234,13 @@ html, body {
     background-color: #ffffff;
 }
 
+.newChatMessageContent {
+    white-space: pre-line;
+    overflow-wrap: break-word;
+}
+
 .newChatMessageText {
     margin-left: 10px;
     width: 90%;
 }
 
-.chatMessageTextArea {
-    white-space: pre-line;
-    overflow-wrap: break-word;
-}

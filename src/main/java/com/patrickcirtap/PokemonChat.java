@@ -21,6 +21,7 @@ public class PokemonChat {
     // TODO - proper exception handling
     // TODO - look into async message sending
     // TODO - synchronise accessing allPokemon
+    // TODO - font style on frontend
 
     private static final List<Pokemon> allPokemon = Arrays.asList(
         new Pokemon("bulbasaur"),
