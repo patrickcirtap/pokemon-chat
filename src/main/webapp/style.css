@@ -192,10 +192,6 @@ html, body {
     transform: rotate(180deg);
 }
 
-.updateMessage {
-    font-style: italic;
-}
-
 #chatWindowText {    
     height: 90px;
     display: flex;
@@ -225,6 +221,10 @@ html, body {
     margin: 10px 60px 10px 10px;
 }
 
+.updateMessage {
+    font-style: italic;
+}
+
 .newChatMessageImg {
     display: flex;
 }
@@ -245,4 +245,3 @@ html, body {
     margin-left: 10px;
     width: 90%;
 }
-

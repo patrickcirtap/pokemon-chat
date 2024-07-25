@@ -203,7 +203,6 @@ function sendMessage() {
     const newChatInputText = document.getElementById("chatInput").value;
 
     if (!newChatInputText || newChatInputText.length < 1 || !newChatInputText.trim()) {
-        resetChatInput();
         return;
     }
 
@@ -219,7 +218,8 @@ function sendMessage() {
         newChatMessageString = JSON.stringify(newChatMessage);
         webSocket.send(newChatMessageString);
 
-        resetChatInput();
+        document.getElementById("chatInput").value = "";
+        document.getElementById("chatInput").focus();
     } catch (e) {
         console.error(`${e}: stringify new chat message: ${newChatMessage}`);
     }
@@ -245,7 +245,7 @@ function createNewChatMessageDiv(sender, chatMessage) {
     newChatMessageImgDiv.appendChild(newChatMessageImg);
 
     const currentTime = getCurrentTime();
-    const senderText = `<b><span style="color: ${pokemonColors[sender]}">${sender.toUpperCase()}</span> ${currentTime}</b>`;
+    const senderText = `<b><span style="color: ${pokemonColors[sender]};">${sender.toUpperCase()}</span> ${currentTime}</b>`;
     const newChatMessageSenderDiv = document.createElement("div");
     newChatMessageSenderDiv.innerHTML = senderText;
 
@@ -266,11 +266,6 @@ function createNewChatMessageDiv(sender, chatMessage) {
     return newChatMessageDiv;
 }
 
-function resetChatInput() {
-    document.getElementById("chatInput").value = "";
-    document.getElementById("chatInput").focus();
-}
-
 function scrollList(list, direction) {
     const listToScroll = document.getElementById(list);
     switch (direction) {
@@ -289,8 +284,8 @@ function scrollList(list, direction) {
 function getCurrentTime() {
     const date = new Date();
     const hours = date.getHours().toString().padStart(2, "0");
-    const mins = date.getMinutes().toString().padStart(2, "0")
-    const secs = date.getSeconds().toString().padStart(2, "0")
+    const mins = date.getMinutes().toString().padStart(2, "0");
+    const secs = date.getSeconds().toString().padStart(2, "0");
 
     return `${hours}:${mins}:${secs}`;
 }
