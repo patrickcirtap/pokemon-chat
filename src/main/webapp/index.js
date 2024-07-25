@@ -152,7 +152,7 @@ function updateConnectedPokemon(message) {
     switch(message.type) {
         case MessageType.NEW_USER_JOIN:
             const newPokemonName = message.content;
-            updateMessage = `${newPokemonName} has joined`;
+            updateMessage = `${newPokemonName.toUpperCase()} has joined`;
 
             if(newPokemonName !== currentPokemonName) {
                 const newConnectedPokemonImg = document.createElement("img");
@@ -164,7 +164,7 @@ function updateConnectedPokemon(message) {
             break;
         case MessageType.USER_LEAVE:
             const leavingPokemonName = message.content;
-            updateMessage = `${leavingPokemonName} has left`;
+            updateMessage = `${leavingPokemonName.toUpperCase()} has left`;
             document.getElementById(leavingPokemonName).remove();
             break;
         default:
@@ -173,11 +173,17 @@ function updateConnectedPokemon(message) {
 
     // TODO - make update messages look cleaner
     const updateMessageDiv = document.createElement("div");
+    updateMessageDiv.classList.add("chatMessage");
+    updateMessageDiv.classList.add("updateMessage");
     updateMessageDiv.innerHTML = updateMessage;
     document.getElementById("chatWindowMessages").appendChild(updateMessageDiv);
 }
 
 function sendMessage() {
+    // updateConnectedPokemon({type: MessageType.NEW_USER_JOIN, sender: "", content: "pikachu"});
+    // return;
+
+
     const newChatMessageText = document.getElementById("chatInput").value;
 
     // TODO - client side validation
@@ -192,7 +198,7 @@ function sendMessage() {
         chatMessageString = JSON.stringify(chatMessage);
         
         webSocket.send(chatMessageString);
-        
+
         document.getElementById("chatInput").value = "";
         document.getElementById("chatInput").focus();
     } catch(e) {

@@ -90,7 +90,7 @@ html, body {
 #pokemonChat {        
     height: 90%;
     width: 1000px;
-    display: none;
+    display: flex;
     margin: 0 auto;
     align-items: center;
     padding-top: 30px;
@@ -162,6 +162,12 @@ html, body {
     height: auto;
     cursor: pointer;
     transform: rotate(180deg);
+}
+
+.updateMessage {
+    /* border: 1px solid #ff0000; */
+
+    font-style: italic;
 }
 
 #chatWindowText {    
