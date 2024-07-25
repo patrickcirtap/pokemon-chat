@@ -23,9 +23,20 @@ public class Pokemon  {
 
     @Override
     public String toString() {
-        // TODO - use stringbuilder
-        return "{\"name\":\"" + this.name +
-                "\",\"isAvailable\":\"" + this.isAvailable +
-                "\"}";
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("{");
+
+        stringBuilder.append("\"name\":\"");
+        stringBuilder.append(name);
+        stringBuilder.append("\"");
+
+        stringBuilder.append(",\"isAvailable\":\"");
+        stringBuilder.append(isAvailable);
+        stringBuilder.append("\"");
+
+        stringBuilder.append("}");
+
+        return stringBuilder.toString();
     }
 }

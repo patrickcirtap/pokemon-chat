@@ -27,19 +27,19 @@ connectToWebSocket();
 
 function connectToWebSocket() {
     webSocket = new WebSocket(pokemonChatWebSocketEndpoint);
-    webSocket.onmessage = function(newMessage) { wsOnMessage(newMessage) };
+    webSocket.onmessage = function (newMessage) { wsOnMessage(newMessage) };
 }
 
 function wsOnMessage(newMessage) {
     let message;
     try {
         message = JSON.parse(newMessage.data);
-    } catch(e) {
+    } catch (e) {
         console.error(`${e}: parsing newMessage object data: ${newMessage.data}`);
         return;
     }
 
-    switch(message.type) {
+    switch (message.type) {
         case MessageType.POKEMON_CHOICES:
             displayPokemonChoices(message);
             break;
@@ -69,21 +69,21 @@ function displayPokemonChoices(message) {
     let pokemonList;
     try {
         pokemonList = JSON.parse(message.content);
-    } catch(e) {
+    } catch (e) {
         console.error(`${e}: parsing Pokemon List choices: ${message.content}`);
         return;
     }
 
     document.getElementById("selectPokemonList").innerHTML = "";
 
-    for(const pokemon of pokemonList) {
+    for (const pokemon of pokemonList) {
         const pokemonName = pokemon.name;
         const pokemonChoiceImg = document.createElement("img");
         pokemonChoiceImg.setAttribute("src", `images/pokemon/${pokemonName}.png`);
         pokemonChoiceImg.classList.add("pokemonImgLarge");
-        if(pokemon.isAvailable === "true") {
+        if (pokemon.isAvailable === "true") {
             pokemonChoiceImg.classList.add("pokemonIsAvailable");
-            pokemonChoiceImg.onclick = function() { requestToJoinChat(pokemonName) };
+            pokemonChoiceImg.onclick = function () { requestToJoinChat(pokemonName) };
         } else {
             pokemonChoiceImg.classList.add("pokemonIsNotAvailable");
         }
@@ -98,10 +98,10 @@ function requestToJoinChat(pokemonName) {
         sender: "",
         content: pokemonName
     }
-    let joinChatRequestString; 
+    let joinChatRequestString;
     try {
         joinChatRequestString = JSON.stringify(joinChatRequestMessage);
-    } catch(e) {
+    } catch (e) {
         console.error(`${e}: stringify join chat request message: ${joinChatRequestMessage}`);
         return;
     }
@@ -121,7 +121,7 @@ function joinChat(message) {
     try {
         connectedPokemon = JSON.parse(message.content);
         displayConnectedPokemon(connectedPokemon);
-    } catch(e) {
+    } catch (e) {
         console.error(`${e}: parsing connected Pokemon list: ${message.content}`);
     }
 
@@ -135,16 +135,16 @@ function joinChat(message) {
 
 function onJoinReject() {
     console.error("Join request rejected");
-    const joinRejectPopup =  document.getElementById("joinRejectPopup");
-    
+    const joinRejectPopup = document.getElementById("joinRejectPopup");
+
     joinRejectPopup.style.display = "block";
-    joinRejectPopup.addEventListener("click", function() {
+    joinRejectPopup.addEventListener("click", function () {
         joinRejectPopup.style.display = "none";
     });
 }
 
 function displayConnectedPokemon(connectedPokemon) {
-    for(const pokemon of connectedPokemon) {
+    for (const pokemon of connectedPokemon) {
         const pokemonName = pokemon.name;
         const connectedPokemonImg = document.createElement("img");
         connectedPokemonImg.setAttribute("id", pokemonName);
@@ -158,12 +158,12 @@ function displayConnectedPokemon(connectedPokemon) {
 function updateConnectedPokemon(message) {
     let updateMessage;
 
-    switch(message.type) {
+    switch (message.type) {
         case MessageType.NEW_USER_JOIN:
             const newPokemonName = message.content;
             updateMessage = `${newPokemonName.toUpperCase()} has joined`;
 
-            if(newPokemonName !== currentPokemonName) {
+            if (newPokemonName !== currentPokemonName) {
                 const newConnectedPokemonImg = document.createElement("img");
                 newConnectedPokemonImg.setAttribute("id", newPokemonName);
                 newConnectedPokemonImg.setAttribute("src", `images/pokemon/${newPokemonName}.png`);
@@ -189,12 +189,15 @@ function updateConnectedPokemon(message) {
 
     const chatWindowMessages = document.getElementById("chatWindowMessages");
     chatWindowMessages.scrollTop = chatWindowMessages.scrollHeight;
+
+    const connectedPokemonList = document.getElementById("connectedPokemonList");
+    connectedPokemonList.scrollTop = connectedPokemonList.scrollHeight;
 }
 
 function sendMessage() {
     const newChatInputText = document.getElementById("chatInput").value;
 
-    if(!newChatInputText || newChatInputText.length < 1) {
+    if (!newChatInputText || newChatInputText.length < 1) {
         return;
     }
 
@@ -212,7 +215,7 @@ function sendMessage() {
 
         document.getElementById("chatInput").value = "";
         document.getElementById("chatInput").focus();
-    } catch(e) {
+    } catch (e) {
         console.error(`${e}: stringify new chat message: ${newChatMessage}`);
     }
 }
@@ -252,7 +255,7 @@ function createNewChatMessageDiv(sender, chatMessage) {
 
 function scrollList(list, direction) {
     const listToScroll = document.getElementById(list);
-    switch(direction) {
+    switch (direction) {
         case "up":
             listToScroll.scrollBy(0, -scrollListDistancePx);
             break;

@@ -21,7 +21,6 @@ public class PokemonChat {
     // TODO - proper exception handling
     // TODO - look into async message sending
     // TODO - synchronise accessing allPokemon
-    // TODO - consider only sending non-available pkmn when showing user options
 
     private static final List<Pokemon> allPokemon = Arrays.asList(
         new Pokemon("bulbasaur"),
@@ -296,7 +295,7 @@ public class PokemonChat {
         try {
             message = gson.fromJson(msg, Message.class);
         } catch(Exception e) {
-            System.out.println("ERROR parsing onMessage");
+            System.out.println("ERROR parsing onMessage: " + msg);
             return;
         }
 
@@ -327,9 +326,9 @@ public class PokemonChat {
     }
 
     @OnError
-    public void onError(Session session, Throwable t) {
+    public void onError(Session session, Throwable t) throws IOException {
         System.out.println("WebSocket error: " + session.getId() + ": " + t.getMessage());
-        // TODO - handle onError
+        handleUserLeave(session);
     }
 
     private void sendPokemonChoicesToNewUser(Session session) throws IOException {

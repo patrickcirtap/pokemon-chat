@@ -119,6 +119,7 @@ html, body {
 }
 
 #connectedPokemon {
+    position: relative;
     width: 35%;
     height: 100%;
     display: flex;
@@ -130,6 +131,7 @@ html, body {
 
 #connectedPokemonList {
     width: 100%;
+    height: calc(100% - 130px);
     margin-top: 5px;
     margin-bottom: 10px;
     overflow-y: auto;
@@ -139,6 +141,12 @@ html, body {
 }
 #connectedPokemonList::-webkit-scrollbar {
     display: none; /* Hide scrollbar: Chrome, Safari, Opera */
+}
+
+#scrollConnectedPokemonListArrowDown {
+    position: absolute;
+    bottom: 29px;
+    left: calc(50% - 21px);
 }
 
 #chatWindow {
