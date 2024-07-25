@@ -202,11 +202,12 @@ function updateConnectedPokemon(message) {
 function sendMessage() {
     const newChatInputText = document.getElementById("chatInput").value;
 
-    if (!newChatInputText || newChatInputText.length < 1) {
+    if (!newChatInputText || newChatInputText.length < 1 || !newChatInputText.trim()) {
+        resetChatInput();
         return;
     }
 
-    const newChatMessageText = newChatInputText.substring(0, chatInputMaxLengthChars);
+    const newChatMessageText = newChatInputText.substring(0, chatInputMaxLengthChars).trim();
 
     const newChatMessage = {
         type: MessageType.NEW_USER_MESSAGE,
@@ -218,8 +219,7 @@ function sendMessage() {
         newChatMessageString = JSON.stringify(newChatMessage);
         webSocket.send(newChatMessageString);
 
-        document.getElementById("chatInput").value = "";
-        document.getElementById("chatInput").focus();
+        resetChatInput();
     } catch (e) {
         console.error(`${e}: stringify new chat message: ${newChatMessage}`);
     }
@@ -264,6 +264,11 @@ function createNewChatMessageDiv(sender, chatMessage) {
     newChatMessageDiv.appendChild(newChatMessageTextDiv);
 
     return newChatMessageDiv;
+}
+
+function resetChatInput() {
+    document.getElementById("chatInput").value = "";
+    document.getElementById("chatInput").focus();
 }
 
 function scrollList(list, direction) {
