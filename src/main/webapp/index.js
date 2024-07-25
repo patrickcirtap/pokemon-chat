@@ -11,17 +11,17 @@ const MessageType = {
 };
 
 let webSocket;
+let currentPokemonName;
 const scrollListDistancePx = 50;
 const selectPokemonTextBoxArrowBlinkSpeedMs = 500;
 const selectPokemonTextBoxArrowEl = document.getElementById("selectPokemonTextBoxArrow");
 
-// TODO - stop this once we join chat
-// const textBoxArrowBlinkIntervalRef = setInterval(function () {
-//     selectPokemonTextBoxArrowEl.style.visibility = (selectPokemonTextBoxArrowEl.style.visibility === 'hidden' ? '' : 'hidden');
-// }, selectPokemonTextBoxArrowBlinkSpeedMs);
+const textBoxArrowBlinkIntervalRef = setInterval(function () {
+    selectPokemonTextBoxArrowEl.style.visibility = (selectPokemonTextBoxArrowEl.style.visibility === 'hidden' ? '' : 'hidden');
+}, selectPokemonTextBoxArrowBlinkSpeedMs);
 
 
-// connectToWebSocket();
+connectToWebSocket();
 
 function connectToWebSocket() {
     webSocket = new WebSocket(`ws://localhost:8080/pokemon-chat/pokemon-chat`);
@@ -32,17 +32,33 @@ function wsOnMessage(newMessage) {
     console.log("wsOnMessage():"); // TODO deletelater //
     console.log(newMessage); // TODO deletelater //
 
-    let messageObject;
+    let message;
     try {
-        messageObject = JSON.parse(newMessage.data);
+        message = JSON.parse(newMessage.data);
     } catch(e) {
         console.error(e);
         return;
     }
 
-    switch(messageObject.type) {
+    switch(message.type) {
         case MessageType.POKEMON_CHOICES:
-            displayPokemonChoices(messageObject);
+            displayPokemonChoices(message);
+            break;
+        case MessageType.JOIN_CONFIRM:
+            joinChat(message);
+            break;
+        case MessageType.JOIN_REJECT:
+            console.error(`REJECT:`); // TODO - give user UI feedback
+            displayPokemonChoices(message);
+            break;
+        case MessageType.NEW_USER_JOIN:
+            updateConnectedPokemon(message);
+            break;
+        case MessageType.NEW_USER_MESSAGE:
+            onNewUserMessage(message);
+            break;
+        case MessageType.USER_LEAVE:
+            updateConnectedPokemon(message);
             break;
         default:
             // TODO - handle default switch statements everywhere
@@ -50,10 +66,10 @@ function wsOnMessage(newMessage) {
     }
 }
 
-function displayPokemonChoices(messageObject) {
+function displayPokemonChoices(message) {
     let pokemonList;
     try {
-        pokemonList = JSON.parse(messageObject.content);
+        pokemonList = JSON.parse(message.content);
     } catch(e) {
         console.error(e);
         return;
@@ -65,9 +81,9 @@ function displayPokemonChoices(messageObject) {
         const pokemonName = pokemon.name;
         const pokemonChoiceImg = document.createElement("img");
         pokemonChoiceImg.setAttribute("src", `images/pokemon/${pokemonName}.png`);
-        pokemonChoiceImg.classList.add("pokemonChoiceLarge");
+        pokemonChoiceImg.classList.add("pokemonImgLarge");
         if(pokemon.isAvailable === "true") {
-            // pokemonChoiceImg.onclick = function() { requestJoinChat(pokemonName) };
+            pokemonChoiceImg.onclick = function() { requestToJoinChat(pokemonName) };
             pokemonChoiceImg.classList.add("pokemonIsAvailable");
         } else {
             pokemonChoiceImg.classList.add("pokemonIsNotAvailable");
@@ -75,6 +91,147 @@ function displayPokemonChoices(messageObject) {
 
         document.getElementById("selectPokemonList").appendChild(pokemonChoiceImg);
     }
+}
+
+function requestToJoinChat(pokemonName) {
+    const joinChatRequestMessage = {
+        type: MessageType.JOIN_REQUEST,
+        sender: "",
+        content: pokemonName
+    }
+    let joinChatRequestString; 
+    try {
+        joinChatRequestString = JSON.stringify(joinChatRequestMessage);
+    } catch(e) {
+        console.error(e);
+        return;
+    }
+
+    webSocket.send(joinChatRequestString);
+}
+
+function joinChat(message) {
+    clearInterval(textBoxArrowBlinkIntervalRef);
+    currentPokemonName = message.sender;
+    document.getElementById("selectPokemon").style.display = "none";
+    document.getElementById("currentPokemon").setAttribute("src", `images/pokemon/${currentPokemonName}.png`)
+    document.getElementById("pokemonChat").style.display = "flex";
+    document.getElementById("chatInput").focus();
+
+    let connectedPokemon;
+    try {
+        connectedPokemon = JSON.parse(message.content);
+        displayConnectedPokemon(connectedPokemon);
+    } catch(e) {
+        console.error(e);
+    }
+
+    document.getElementById("chatInput").addEventListener("keypress", e => {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+}
+
+function displayConnectedPokemon(connectedPokemon) {
+    for(const pokemon of connectedPokemon) {
+        const pokemonName = pokemon.name;
+        const connectedPokemonImg = document.createElement("img");
+        connectedPokemonImg.setAttribute("id", pokemonName);
+        connectedPokemonImg.setAttribute("src", `images/pokemon/${pokemonName}.png`);
+        connectedPokemonImg.classList.add("pokemonImgLarge");
+
+        document.getElementById("connectedPokemonList").appendChild(connectedPokemonImg);
+    }
+}
+
+function updateConnectedPokemon(message) {
+    let updateMessage;
+
+    switch(message.type) {
+        case MessageType.NEW_USER_JOIN:
+            const newPokemonName = message.content;
+            updateMessage = `${newPokemonName} has joined`;
+
+            if(newPokemonName !== currentPokemonName) {
+                const newConnectedPokemonImg = document.createElement("img");
+                newConnectedPokemonImg.setAttribute("id", newPokemonName);
+                newConnectedPokemonImg.setAttribute("src", `images/pokemon/${newPokemonName}.png`);
+                newConnectedPokemonImg.classList.add("pokemonImgLarge");
+                document.getElementById("connectedPokemonList").appendChild(newConnectedPokemonImg);
+            }
+            break;
+        case MessageType.USER_LEAVE:
+            const leavingPokemonName = message.content;
+            updateMessage = `${leavingPokemonName} has left`;
+            document.getElementById(leavingPokemonName).remove();
+            break;
+        default:
+            break;
+    }
+
+    // TODO - make update messages look cleaner
+    const updateMessageDiv = document.createElement("div");
+    updateMessageDiv.innerHTML = updateMessage;
+    document.getElementById("chatWindowMessages").appendChild(updateMessageDiv);
+}
+
+function sendMessage() {
+    const newChatMessageText = document.getElementById("chatInput").value;
+
+    // TODO - client side validation
+
+    const chatMessage = {
+        type: MessageType.NEW_USER_MESSAGE,
+        sender: "",
+        content: newChatMessageText
+    };
+    let chatMessageString;
+    try {
+        chatMessageString = JSON.stringify(chatMessage);
+        
+        webSocket.send(chatMessageString);
+        
+        document.getElementById("chatInput").value = "";
+        document.getElementById("chatInput").focus();
+    } catch(e) {
+        console.error(e);
+    }
+}
+
+function onNewUserMessage(message) {
+    const sender = message.sender;
+    const content = message.content;
+
+    const newUserMessage = createNewChatMessageDiv(sender, content);
+    document.getElementById("chatWindowMessages").appendChild(newUserMessage);
+
+    const chatWindowMessages = document.getElementById("chatWindowMessages");
+    chatWindowMessages.scrollTop = chatWindowMessages.scrollHeight;
+}
+
+function createNewChatMessageDiv(sender, chatMessage) {
+    const newChatMessageImg = document.createElement("img");
+    newChatMessageImg.setAttribute("src", `images/pokemon/${sender}.png`);
+    newChatMessageImg.classList.add("pokemonImgSmall");
+    const newChatMessageImgDiv = document.createElement("div");
+    newChatMessageImgDiv.classList.add("newChatMessageImg");
+    newChatMessageImgDiv.appendChild(newChatMessageImg);
+
+    const newChatMessageTextDiv = document.createElement("div");
+    newChatMessageTextDiv.classList.add("newChatMessageText");
+    const currentTime = getCurrentTime();
+    const senderText = `<b><span style="color: ${pokemonColors[sender]}">${sender.toUpperCase()}</span> ${currentTime}</b>`;
+    newChatMessageTextDiv.innerHTML = `${senderText}<br/><span class="chatMessageTextArea">${chatMessage}</span>`;
+
+    const newChatMessageDiv = document.createElement("div");
+    newChatMessageDiv.classList.add("chatMessage");
+    newChatMessageDiv.appendChild(newChatMessageImgDiv);
+    newChatMessageDiv.appendChild(newChatMessageTextDiv);
+
+    return newChatMessageDiv;
+
 }
 
 function scrollList(list, direction) {
@@ -92,39 +249,30 @@ function scrollList(list, direction) {
     }
 }
 
-function sendMessage() {
-    const chatMessage = document.getElementById("chatInput").value;
-    // TODO - client side validation
+function getCurrentTime() {
+    const date = new Date();
+    const hours = date.getHours().toString().padStart(2, "0");
+    const mins = date.getMinutes().toString().padStart(2, "0")
+    const secs = date.getSeconds().toString().padStart(2, "0")
 
-    const newChatMessage = createNewChatMessageDiv("Lugia", chatMessage);
-    document.getElementById("chatWindowMessages").appendChild(newChatMessage);
-    
-    const chatWindow = document.getElementById("chatWindowMessages");
-    chatWindow.scrollTop = chatWindow.scrollHeight;
-
-    document.getElementById("chatInput").value = "";
+    return `${hours}:${mins}:${secs}`;
 }
 
-function createNewChatMessageDiv(sender, chatMessage) {
-    const newChatMessageImg = document.createElement("img");
-    newChatMessageImg.setAttribute("src", "images/pokemon/lugia.png");
-    newChatMessageImg.classList.add("pokemonChoiceSmall");
-    const newChatMessageImgDiv = document.createElement("div");
-    newChatMessageImgDiv.classList.add("newChatMessageImg");
-    newChatMessageImgDiv.appendChild(newChatMessageImg);
 
-    const newChatMessageTextDiv = document.createElement("div");
-    newChatMessageTextDiv.classList.add("newChatMessageText");
-    newChatMessageTextDiv.innerHTML = `${sender}:<br/>${chatMessage}`;
 
-    const newChatMessageDiv = document.createElement("div");
-    newChatMessageDiv.classList.add("chatMessage");
-    newChatMessageDiv.appendChild(newChatMessageImgDiv);
-    newChatMessageDiv.appendChild(newChatMessageTextDiv);
 
-    return newChatMessageDiv;
 
-}
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -132,6 +280,7 @@ function createNewChatMessageDiv(sender, chatMessage) {
 // TODO - deletelater
 
 // TODO - delete this ///////////////////////////////////////////
+/*
 const pokemonListTest = [
     {name: "bulbasaur", isAvailable: "true"},
     {name: "ivysaur", isAvailable: "true"},
@@ -395,7 +544,7 @@ function testDisplayPokemonChoices() {
         const pokemonName = pokemon.name;
         const pokemonChoiceImg = document.createElement("img");
         pokemonChoiceImg.setAttribute("src", `images/pokemon/${pokemonName}.png`);
-        pokemonChoiceImg.classList.add("pokemonChoiceLarge");
+        pokemonChoiceImg.classList.add("pokemonImgLarge");
         pokemonChoiceImg.style.backgroundColor = pokemonColors[pokemonName];
         if(pokemon.isAvailable === "true") {
             pokemonChoiceImg.classList.add("pokemonIsAvailable");
@@ -413,14 +562,15 @@ function testDisplayConnectedPokemon() {
         const pokemonName = pokemon.name;
         const connectedPokemonImg = document.createElement("img");
         connectedPokemonImg.setAttribute("src", `images/pokemon/${pokemonName}.png`);
-        connectedPokemonImg.classList.add("pokemonChoiceLarge");
+        connectedPokemonImg.classList.add("pokemonImgLarge");
         connectedPokemonImg.style.backgroundColor = pokemonColors[pokemonName];
 
         document.getElementById("connectedPokemonList").appendChild(connectedPokemonImg);
 
         i++;
-        if(i >= 47) {
+        if(i >= 8) {
             return;
         }
     }
 }
+*/

@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <!-- <div id="selectPokemon">
+    <div id="selectPokemon">
         <div>
             <img src="images/arrow.png" alt="Scroll up" class="scrollArrow" onclick="scrollList('selectPokemonList', 'up')">
         </div>
@@ -21,14 +21,13 @@
             <img src="images/select_box.png" alt="Select a Pokemon..." class="selectPokemonTextBoxImg">
             <img src="images/arrow.png" id="selectPokemonTextBoxArrow" class="scrollArrowDown">
         </div>
-    </div> -->
+    </div>
     <div id="pokemonChat">
         <div id="connectedPokemon">
             <div>
                 <img src="images/arrow.png" alt="Scroll up" class="scrollArrow" onclick="scrollList('connectedPokemonList', 'up')">
             </div>
-            <div id="connectedPokemonList">
-            </div>
+            <div id="connectedPokemonList"></div>
             <div>
                 <img src="images/arrow.png" alt="Scroll down" class="scrollArrow scrollArrowDown" onclick="scrollList('connectedPokemonList', 'down')">
             </div>
@@ -40,10 +39,10 @@
             <div id="chatWindowText">
                 <div id="chatWindowTextIconInput">
                     <div>
-                        <img src="images/pokemon/dragonite.png" class="pokemonChoiceLarge">
+                        <img id="currentPokemon" class="pokemonImgLarge">
                     </div>
                     <div>
-                        <textarea id="chatInput"></textarea>
+                        <textarea id="chatInput" maxlength="300"></textarea>
                     </div>
                 </div>
                 <div>
