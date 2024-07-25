@@ -1,6 +1,7 @@
 package com.patrickcirtap;
 
 import com.google.gson.Gson;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -277,8 +278,9 @@ public class PokemonChat {
         new Pokemon("egg")
     );
     private static final HashMap<Session, Pokemon> sessions = new HashMap<>();
-    private final Gson gson = new Gson();
     private static final String SERVER_NAME = "server";
+    private static final int CHAT_MESSAGE_MAX_LENGTH_CHARS = 300;
+    private final Gson gson = new Gson();
 
     @OnOpen
     public void onOpen(Session session) throws IOException {
@@ -304,7 +306,13 @@ public class PokemonChat {
                 break;
             case NEW_USER_MESSAGE:
                 final String messageSender = sessions.get(session).getName();
-                broadcastMessage(message.getType(), messageSender, message.getContent());
+                String messageContent = message.getContent();
+
+                if(!isValidMessage(messageContent)) {
+                    return;
+                }
+                messageContent = StringUtils.substring(messageContent, 0, CHAT_MESSAGE_MAX_LENGTH_CHARS);
+                broadcastMessage(message.getType(), messageSender, messageContent);
                 break;
             default:
                 // TODO - handle unknown message type
@@ -370,6 +378,14 @@ public class PokemonChat {
         sessions.remove(session);
 
         broadcastMessage(MessageType.USER_LEAVE, SERVER_NAME, leavingPokemonName);
+    }
+
+    private boolean isValidMessage(String message) {
+        if(message == null || message.isEmpty()) {
+            return false;
+        }
+
+        return true;
     }
 
     private void broadcastMessage(MessageType type, String sender, String content) throws IOException {

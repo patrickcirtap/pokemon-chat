@@ -1,3 +1,5 @@
+"use strict";
+
 const pokemonColors = {
     "bulbasaur": "#77dd6b",
     "ivysaur": "#79e576",
