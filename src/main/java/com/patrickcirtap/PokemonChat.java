@@ -5,8 +5,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Logger;
 
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
@@ -277,26 +278,27 @@ public class PokemonChat {
         new Pokemon("celebi"),
         new Pokemon("egg")
     );
-    private static final HashMap<Session, Pokemon> sessions = new HashMap<>();
+    private static final ConcurrentHashMap<Session, Pokemon> sessions = new ConcurrentHashMap<>();
+    private static final Logger logger = Logger.getLogger(PokemonChat.class.getName());
     private static final String SERVER_NAME = "server";
     private static final int CHAT_MESSAGE_MAX_LENGTH_CHARS = 300;
-    private final Gson gson = new Gson();
+    private static final Gson gson = new Gson();
 
     @OnOpen
-    public void onOpen(Session session) throws IOException {
-        System.out.println("WebSocket opened: " + session.getId());
+    public void onOpen(Session session) {
+        logger.info("OnOpen: " + session.getId());
         sendPokemonChoicesToNewUser(session);
     }
 
     @OnMessage
-    public void onMessage(String msg, Session session) throws IOException {
-        System.out.println("Message received from " + session.getId() + ": " + msg);
+    public void onMessage(String msg, Session session) {
+        logger.info("OnMessage from " + session.getId() + ": " + msg);
 
         Message message;
         try {
             message = gson.fromJson(msg, Message.class);
         } catch(Exception e) {
-            System.out.println("ERROR parsing onMessage: " + msg);
+            logger.warning("OnMessage parsing: " + msg + ": " + e);
             return;
         }
 
@@ -315,32 +317,36 @@ public class PokemonChat {
                 broadcastMessage(message.getType(), messageSender, messageContent);
                 break;
             default:
-                // TODO - handle unknown message type
+                logger.warning("OnMessage unknown message type: " + message.getType());
                 break;
         }
     }
 
     @OnClose
-    public void onClose(Session session) throws IOException {
-        System.out.println("WebSocket closed: " + session.getId());
+    public void onClose(Session session) {
+        logger.info("OnClose: " + session.getId());
         handleUserLeave(session);
     }
 
     @OnError
-    public void onError(Session session, Throwable t) throws IOException {
-        System.out.println("WebSocket error: " + session.getId() + ": " + t.getMessage());
+    public void onError(Session session, Throwable t) {
+        logger.warning("OnError: " + session.getId() + ": " + t);
         handleUserLeave(session);
     }
 
-    private void sendPokemonChoicesToNewUser(Session session) throws IOException {
+    private void sendPokemonChoicesToNewUser(Session session) {
         final String allPokemonString = allPokemon.toString();
         final Message pokemonChoicesMessage = new Message(MessageType.POKEMON_CHOICES, SERVER_NAME, allPokemonString);
         final String pokemonChoicesMessageString = gson.toJson(pokemonChoicesMessage);
 
-        session.getBasicRemote().sendText(pokemonChoicesMessageString);
+        try {
+            session.getBasicRemote().sendText(pokemonChoicesMessageString);
+        } catch (IOException e) {
+            logger.warning("Failure sending Pokemon choices: " + e);
+        }
     }
 
-    private void checkJoinRequest(Session session, String requestedPokemonName) throws IOException {
+    private void checkJoinRequest(Session session, String requestedPokemonName) {
         for(Pokemon pokemon : allPokemon) {
             if(pokemon.getName().equals(requestedPokemonName) && pokemon.getIsAvailable()) {
                 confirmNewUser(session, pokemon);
@@ -351,31 +357,44 @@ public class PokemonChat {
         rejectNewUser(session);
     }
 
-    private void confirmNewUser(Session session, Pokemon pokemon) throws IOException {
+    private void confirmNewUser(Session session, Pokemon pokemon) {
         final String joinedPokemonName = pokemon.getName();
         pokemon.setIsAvailable(false);
         final String allConnectedPokemonString = sessions.values().toString();
         Message newUserJoinMessage = new Message(MessageType.JOIN_CONFIRM, joinedPokemonName, allConnectedPokemonString);
         final String newUserJoinMessageString = gson.toJson(newUserJoinMessage);
 
-        session.getBasicRemote().sendText(newUserJoinMessageString);
+        try {
+            session.getBasicRemote().sendText(newUserJoinMessageString);
+        } catch (IOException e) {
+            logger.warning("Failure sending join confirmation: " + e);
+        }
 
         sessions.put(session, pokemon);
         broadcastMessage(MessageType.NEW_USER_JOIN, SERVER_NAME, joinedPokemonName);
     }
 
-    private void rejectNewUser(Session session) throws IOException {
+    private void rejectNewUser(Session session) {
         final String allPokemonString = allPokemon.toString();
         Message joinRejectMessage = new Message(MessageType.JOIN_REJECT, SERVER_NAME, allPokemonString);
         final String joinRejectMessageString = gson.toJson(joinRejectMessage);
 
-        session.getBasicRemote().sendText(joinRejectMessageString);
+        try {
+            session.getBasicRemote().sendText(joinRejectMessageString);
+        } catch (IOException e) {
+            logger.warning("Failure sending join rejection: " + e);
+        }
     }
 
-    private void handleUserLeave(Session session) throws IOException {
+    private void handleUserLeave(Session session) {
         final String leavingPokemonName = sessions.get(session).getName();
         sessions.get(session).setIsAvailable(true);
         sessions.remove(session);
+        try {
+            session.close();
+        } catch (IOException e) {
+            logger.warning("Failure closing session: " + e);
+        }
 
         broadcastMessage(MessageType.USER_LEAVE, SERVER_NAME, leavingPokemonName);
     }
@@ -388,12 +407,16 @@ public class PokemonChat {
         return true;
     }
 
-    private void broadcastMessage(MessageType type, String sender, String content) throws IOException {
+    private void broadcastMessage(MessageType type, String sender, String content) {
         final Message newMessage = new Message(type, sender, content);
         final String newMessageString = gson.toJson(newMessage);
 
         for(Session session : sessions.keySet()) {
-            session.getBasicRemote().sendText(newMessageString);
+            try {
+                session.getBasicRemote().sendText(newMessageString);
+            } catch (IOException e) {
+                logger.warning("Failure broadcasting chat message to " + session.getId() + ": " + e);
+            }
         }
     }
 }
