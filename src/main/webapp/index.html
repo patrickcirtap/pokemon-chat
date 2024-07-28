@@ -5,24 +5,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pokemon Chat</title>
-    <link rel="icon" type="image/png" href="images/favicon.ico" />
+    <link rel="icon" type="image/png" href="assets/images/favicon.ico" />
 </head>
 
 <body>
     <div id="selectPokemon">
         <div>
-            <img src="images/arrow.png" alt="Scroll up" class="scrollArrow" onclick="scrollList('selectPokemonList', 'up')">
+            <img src="assets/images/arrow.png" alt="Scroll up" class="scrollArrow" onclick="scrollList('selectPokemonList', 'up')">
         </div>
         <div id="selectPokemonList"></div>
         <div>
-            <img src="images/arrow.png" alt="Scroll down" class="scrollArrow scrollArrowDown" onclick="scrollList('selectPokemonList', 'down')">
+            <img src="assets/images/arrow.png" alt="Scroll down" class="scrollArrow scrollArrowDown" onclick="scrollList('selectPokemonList', 'down')">
         </div>
         <div id="selectPokemonTextBox">
-            <img src="images/select_box.png" alt="Select a Pokemon..." class="selectPokemonTextBoxImg">
-            <img src="images/arrow.png" id="selectPokemonTextBoxArrow" class="scrollArrowDown">
+            <img src="assets/images/select_box.png" alt="Select a Pokemon..." class="selectPokemonTextBoxImg">
+            <img src="assets/images/arrow.png" id="selectPokemonTextBoxArrow" class="scrollArrowDown">
         </div>
-        <div id="joinRejectPopup">
-            <div id="joinRejectContent">
+        <div id="joinRejectPopup" class="alertPopup">
+            <div class="alertContent">
                 <div>Something went wrong.</div>
                 <div>Please try again.</div>
                 <br/>
@@ -34,16 +34,16 @@
     <div id="pokemonChat">
         <div id="connectedPokemon">
             <div>
-                <img src="images/arrow.png" alt="Scroll up" class="scrollArrow" onclick="scrollList('connectedPokemonList', 'up')">
+                <img src="assets/images/arrow.png" alt="Scroll up" class="scrollArrow" onclick="scrollList('connectedPokemonList', 'up')">
             </div>
             <div id="connectedPokemonList"></div>
             <div>
-                <img src="images/arrow.png" alt="Scroll down" id="scrollConnectedPokemonListArrowDown" class="scrollArrow scrollArrowDown" onclick="scrollList('connectedPokemonList', 'down')">
+                <img src="assets/images/arrow.png" alt="Scroll down" id="scrollConnectedPokemonListArrowDown" class="scrollArrow scrollArrowDown" onclick="scrollList('connectedPokemonList', 'down')">
             </div>
         </div>
         <div id="chatWindow">
-            <img src="images/arrow.png" alt="Scroll up" id="scrollChatArrowUp" onclick="scrollList('chatWindowMessages', 'up')">
-            <img src="images/arrow.png" alt="Scroll down" id="scrollChatArrowDown" onclick="scrollList('chatWindowMessages', 'down')">
+            <img src="assets/images/arrow.png" alt="Scroll up" id="scrollChatArrowUp" onclick="scrollList('chatWindowMessages', 'up')">
+            <img src="assets/images/arrow.png" alt="Scroll down" id="scrollChatArrowDown" onclick="scrollList('chatWindowMessages', 'down')">
             <div id="chatWindowMessages"></div>
             <div id="chatWindowText">
                 <div id="chatWindowTextIconInput">
@@ -55,8 +55,14 @@
                     </div>
                 </div>
                 <div>
-                    <img src="images/arrow.png" alt="Send" class="scrollArrow" onclick="sendMessage()">
+                    <img src="assets/images/arrow.png" alt="Send" class="scrollArrow" onclick="sendMessage()">
                 </div>
+            </div>
+        </div>
+        <div id="chatErrorPopup" class="alertPopup">
+            <div class="alertContent">
+                <div>Something went wrong.</div>
+                <div>Please refresh and try again.</div>
             </div>
         </div>
     </div>

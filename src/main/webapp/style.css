@@ -1,5 +1,5 @@
 html, body {
-    background-image: url("images/background.png");
+    background-image: url("./assets/images/background.png");
     background-size: 200px;
     background-color: #eaffe9;
     height: 100%;
@@ -84,6 +84,9 @@ html, body {
 }
 
 #joinRejectPopup {
+    cursor: pointer;
+}
+.alertPopup {
     display: none;
     position: absolute;
     left: 50%;
@@ -98,9 +101,8 @@ html, body {
     outline: 2px solid #000000;
     outline-offset: -4px;
     padding: 10px;
-    cursor: pointer;
 }
-#joinRejectContent {
+.alertContent {
     position: relative;
     top: 30%;
     text-align: center;
