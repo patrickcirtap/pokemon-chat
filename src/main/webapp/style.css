@@ -8,6 +8,8 @@ html, body {
     color: #000000;
 }
 
+/* [Select Pokemon] window styling */
+
 #selectPokemon {
     height: 95%;
     width: 500px;
@@ -83,9 +85,6 @@ html, body {
     height: auto;
 }
 
-#joinRejectPopup {
-    cursor: pointer;
-}
 .alertPopup {
     display: none;
     position: absolute;
@@ -107,11 +106,11 @@ html, body {
     top: 30%;
     text-align: center;
 }
+#joinRejectPopup {
+    cursor: pointer;
+}
 
-
-/* ABOVE: select pokemon window */
-/* BELOW: pokemon chat window */
-
+/* [Pokemon chat] window styling */
 
 #pokemonChat {        
     height: 90%;

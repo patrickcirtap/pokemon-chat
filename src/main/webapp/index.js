@@ -13,7 +13,7 @@ const MessageType = {
 let webSocket;
 let currentPokemonName;
 const pokemonChatWebSocketEndpoint = "/pokemon-chat/pokemon-chat";
-const scrollListDistancePx = 100;
+const scrollListDistancePx = 75;
 const chatInputMaxLengthChars = 300;
 const selectPokemonTextBoxArrowBlinkSpeedMs = 300;
 const selectPokemonTextBoxArrowEl = document.getElementById("selectPokemonTextBoxArrow");
@@ -138,14 +138,6 @@ function joinChat(message) {
             sendMessage();
         }
     });
-    // setInterval(function () {
-    //     if((new Date()).getSeconds() % 20 === 0) {
-    //         if(!hasRun) {
-    //             webSocket.send(`{"type":"NEW_USER_MESSAGE","sender":"","content":"TEST ${currentPokemonName} ${t++}"}`);
-    //             hasRun = true;
-    //         } return;
-    //     } else { hasRun = false; }
-    // }, 25);
 }
 
 function displayConnectedPokemon(connectedPokemon) {
