@@ -4,7 +4,7 @@ A Pokémon-themed chat application, inspired by the GameBoy Color Generation 2 P
 
 The application is a Java WebSocket server, served in the Tomcat servlet (version 9). The frontend uses plain HTML, CSS, JavaScript.
 
-## Deployment
+## Local Deployment
 
 1. Ensure Tomcat is running on the system
 - `systemctl status tomcat`
