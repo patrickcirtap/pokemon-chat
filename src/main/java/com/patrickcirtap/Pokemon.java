@@ -2,7 +2,7 @@ package com.patrickcirtap;
 
 public class Pokemon  {
     private final String name;
-    private volatile boolean isAvailable;
+    private boolean isAvailable;
 
     public Pokemon(String name) {
         this.name = name;
@@ -13,11 +13,11 @@ public class Pokemon  {
         return name;
     }
 
-    public void setIsAvailable(boolean isAvailable) {
+    public synchronized void setIsAvailable(boolean isAvailable) {
         this.isAvailable = isAvailable;
     }
 
-    public boolean getIsAvailable() {
+    public synchronized boolean getIsAvailable() {
         return this.isAvailable;
     }
 
