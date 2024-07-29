@@ -14,7 +14,7 @@ The application is a Java WebSocket server, served in the Tomcat servlet (versio
 - `mvn clean package`
 
 3. Deploy to Tomcat
-`cp target/pokemon-chat.war /opt/tomcat/webapps/`
+- `cp target/pokemon-chat.war /opt/tomcat/webapps/`
 
 4. Access the application
 - `http://localhost:8080/pokemon-chat/`
