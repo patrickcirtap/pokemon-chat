@@ -111,11 +111,11 @@ public class PokemonChat {
             new Pokemon("pupitar"),    new Pokemon("tyranitar"),  new Pokemon("lugia"),
             new Pokemon("ho-oh"),      new Pokemon("celebi"),     new Pokemon("egg")
     ));
-    private static final Gson gson = new Gson();
 
     /* client-instance-specific properties */
     private Session thisSession;
     private Pokemon thisPokemon;
+    private final Gson gson = new Gson();
     private final Queue<String> messageBacklog = new ArrayDeque<>();
     private boolean isMessageSendingInProgress = false;
 
