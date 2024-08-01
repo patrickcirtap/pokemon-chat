@@ -368,7 +368,7 @@ const pokemonColors = {
     "aipom":      "#421c73", "sunkern":    "#bad629", "sunflora":   "#53b300", 
     "yanma":      "#943741", "wooper":     "#87a5cb", "quagsire":   "#7ca5d1", 
     "espeon":     "#8d7ecf", "umbreon":    "#303820", "murkrow":    "#60617d", 
-    "slowking":   "#ff4bf5", "misdreavus": "#584692", "unknown":    "#000b00", 
+    "slowking":   "#ff4bf5", "misdreavus": "#584692", "unown":      "#000b00", 
     "wobbuffet":  "#5ec9bf", "girafarig":  "#fdb316", "pineco":     "#3e3d69", 
     "forretress": "#8e364c", "dunsparce":  "#edbf38", "gligar":     "#cb33a2", 
     "steelix":    "#8a77d1", "snubbull":   "#e57470", "granbull":   "#ea86ba", 

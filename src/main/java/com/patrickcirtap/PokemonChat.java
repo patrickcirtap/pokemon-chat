@@ -92,7 +92,7 @@ public class PokemonChat {
             new Pokemon("aipom"),      new Pokemon("sunkern"),    new Pokemon("sunflora"),
             new Pokemon("yanma"),      new Pokemon("wooper"),     new Pokemon("quagsire"),
             new Pokemon("espeon"),     new Pokemon("umbreon"),    new Pokemon("murkrow"),
-            new Pokemon("slowking"),   new Pokemon("misdreavus"), new Pokemon("unknown"),
+            new Pokemon("slowking"),   new Pokemon("misdreavus"), new Pokemon("unown"),
             new Pokemon("wobbuffet"),  new Pokemon("girafarig"),  new Pokemon("pineco"),
             new Pokemon("forretress"), new Pokemon("dunsparce"),  new Pokemon("gligar"),
             new Pokemon("steelix"),    new Pokemon("snubbull"),   new Pokemon("granbull"),
