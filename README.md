@@ -20,3 +20,6 @@ The application is a Java WebSocket server, served in the Tomcat servlet (versio
 - `http://localhost:8080/pokemon-chat/`
 
 See `demo.mp4` for a demonstration video.
+
+![alt text](./screenshot.png)
+
